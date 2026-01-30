@@ -139,11 +139,15 @@ jobs:
           if [ -n "${{ matrix.kconfig }}" -a "${{ matrix.kconfig }}" != 'default' ]
           then
             kconfig_file="${GITHUB_WORKSPACE}/miryoku_zmk/config/$keyboard_split.conf"
-            echo "${{ matrix.kconfig }}" >> "$kconfig_file"
+
+            for opt in ${{ matrix.kconfig }}
+            do
+              echo "$opt" >> "$kconfig_file"
+            done
+
             test "$MIRYOKU_DEBUG" = 'MIRYOKU_DEBUG_TRUE' && cp "$kconfig_file" "$artifact_dir"
             run_name="$run_name kconfig_"`echo "${{ matrix.kconfig }}" | md5sum | head -c "$hash_length"`
           fi
-
           if [ -n "${{ matrix.branches }}" -a "${{ matrix.branches }}" != 'default' ]
           then
             run_name="$run_name branches_"`echo "${{ matrix.branches }}" | md5sum | head -c "$hash_length"`
